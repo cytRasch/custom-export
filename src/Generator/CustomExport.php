@@ -322,8 +322,6 @@ class CustomExport extends CSVPluginGenerator
 
         if(in_array(substr($data['title'], 0, 2), ['28', '29']))
             $this->addCSVContent(array_values($data));
-
-        $this->addCSVContent(array_values($data));
     }
 
     /**
