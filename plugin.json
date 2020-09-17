@@ -1,0 +1,33 @@
+{
+  "name": "PluginCustomExportTutorial",
+  "namespace": "PluginCustomExportTutorial",
+  "type": "export",
+  "version": "1.0.0",
+  "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007",
+  "pluginIcon": "icon_plugin_md.png",
+  "price": 0.00,
+  "description": "This plugin adds the format CustomExport to the Elastic Export.",
+  "shortDescription": {
+    "de": "Ein einfaches CustomExport-Plugin.",
+    "en": "A basic export format plugin."
+  },
+  "categories": [
+    "3523"
+  ],
+  "marketplaceName": {
+    "de":"CustomExport-Tutorial",
+    "en":"Export format tutorial"
+  },
+  "require": [
+    "ElasticExport"
+  ],
+  "author": "plentymarkets GmbH",
+  "authorIcon": "icon_author_xs.png",
+  "serviceProvider": "PluginCustomExportTutorial\\CustomExportServiceProvider",
+  "keywords": [
+    "plugin",
+    "export",
+    "format",
+    "tutorial"
+  ]
+}
