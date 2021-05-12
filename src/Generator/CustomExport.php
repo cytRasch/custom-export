@@ -3,26 +3,26 @@
 namespace PluginCustomExportTutorial\Generator;
 
 
+use ElasticExport\Helper\ElasticExportCoreHelper;
 use ElasticExport\Helper\ElasticExportItemHelper;
 use ElasticExport\Helper\ElasticExportPriceHelper;
 use ElasticExport\Helper\ElasticExportPropertyHelper;
 use ElasticExport\Helper\ElasticExportStockHelper;
 use ElasticExport\Services\FiltrationService;
 use ElasticExport\Services\PriceDetectionService;
-use PluginCustomExportTutorial\Helper\AttributeHelper;
-use PluginCustomExportTutorial\Helper\PriceHelper;
 use Plenty\Legacy\Services\Item\Variation\DetectSalesPriceService;
 use Plenty\Modules\DataExchange\Contracts\CSVPluginGenerator;
-use Plenty\Modules\Helper\Services\ArrayHelper;
-use ElasticExport\Helper\ElasticExportCoreHelper;
 use Plenty\Modules\Helper\Models\KeyValue;
+use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Item\Search\Contracts\VariationElasticSearchScrollRepositoryContract;
 use Plenty\Modules\Item\Variation\Contracts\VariationExportServiceContract;
 use Plenty\Modules\Item\Variation\Services\ExportPreloadValue\ExportPreloadValue;
 use Plenty\Modules\Order\Currency\Contracts\CurrencyRepositoryContract;
 use Plenty\Modules\Order\Currency\Models\Currency;
 use Plenty\Plugin\Log\Loggable;
+use PluginCustomExportTutorial\Helper\AttributeHelper;
 use PluginCustomExportTutorial\Helper\ImageHelper;
+use PluginCustomExportTutorial\Helper\PriceHelper;
 
 
 /**
@@ -195,8 +195,9 @@ class CustomExport extends CSVPluginGenerator
         $this->attributeHelper->setPropertyHelper();
 
         $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
-        $this->filtrationService = pluginApp(FiltrationService::class, ['settings'       => $settings,
-                                                                        'filterSettings' => $filter
+        $this->filtrationService = pluginApp(FiltrationService::class, [
+            'settings'       => $settings,
+            'filterSettings' => $filter
         ]);
 
         $this->setDelimiter("	"); // this is tab character!
@@ -266,7 +267,7 @@ class CustomExport extends CSVPluginGenerator
                             continue;
                         }
 
-                        if($this->elasticExportHelper->getBarcodeByType($variation, $settings->get('barcode')) === '' || !$this->elasticExportHelper->getBarcodeByType($variation, $settings->get('barcode')))
+                        if ( $this->elasticExportHelper->getBarcodeByType($variation, $settings->get('barcode')) === '' || !$this->elasticExportHelper->getBarcodeByType($variation, $settings->get('barcode')) )
                             continue;
 
                         try {
@@ -317,12 +318,14 @@ class CustomExport extends CSVPluginGenerator
             'title'        => $this->elasticExportHelper->getMutatedName($variation, $settings, 256) . '-' . $variationAttributes[self::CHARACTER_TYPE_SIZE],
             'availability' => $this->elasticExportHelper->getAvailability($variation, $settings, false),
             'gtin'         => $this->elasticExportHelper->getBarcodeByType($variation, $settings->get('barcode')),
-            'stock'        => $this->elasticExportStockHelper->getStock($variation)
+            'stock'        => $this->elasticExportStockHelper->getStock($variation),
+            'technical'    => $this->elasticExportHelper->getTechnicalData($variation, $settings),
         ];
 
 
         $this->addCSVContent(array_values($data));
     }
+
 
     /**
      * @return array
@@ -332,9 +335,10 @@ class CustomExport extends CSVPluginGenerator
 
         return [
             'id',
-            'gtin',
             'availability',
+            'gtin',
             'stock',
+            'technical'
         ];
     }
 }
