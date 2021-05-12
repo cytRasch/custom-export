@@ -319,7 +319,7 @@ class CustomExport extends CSVPluginGenerator
             'availability' => $this->elasticExportHelper->getAvailability($variation, $settings, false),
             'gtin'         => $this->elasticExportHelper->getBarcodeByType($variation, $settings->get('barcode')),
             'stock'        => $this->elasticExportStockHelper->getStock($variation),
-            'technical'    => $this->elasticExportHelper->getTechnicalData($variation, $settings),
+            'technical'    => $this->elasticExportHelper->getMutatedDescription($variation, $settings, 256),
         ];
 
 
